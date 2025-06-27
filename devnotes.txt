@@ -8,7 +8,5 @@ image handling*
 csv file now needs four columns-> front, front_mage, back, back_image
 content is optional text or image they would just show as empty 
 
-csv file selection
-
-
-"C:\Dev\WebDev\webapp\csv_files\constants.csv"
+csv file selection*
+keyboard controls*

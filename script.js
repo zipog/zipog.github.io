@@ -23,6 +23,7 @@ function loadCSVFile(filePath) {
 
 loadCSVFile(csvSelect.value);
 
+// built-in csv parser
 // function parseCSV(csv) {
 //   const lines = csv.trim().split("\n").slice(1); // skip header
 
@@ -37,6 +38,7 @@ loadCSVFile(csvSelect.value);
 //   });
 // }
 
+// parsing using papa parse
 function parseCSV(csv) {
   const parsed = Papa.parse(csv, {
     header: true,
@@ -73,6 +75,7 @@ function showCard() {
   showingFront = true;
 }
 
+// Button presses
 flipBtn.addEventListener("click", () => {
   const card = flashcards[currentIndex];
   if (showingFront) {
@@ -113,3 +116,55 @@ shuffleBtn.addEventListener("click", () => {
 csvSelect.addEventListener("change", () => {
   loadCSVFile(csvSelect.value);
 });
+
+
+// keyboard controls
+document.addEventListener("keydown", function (event) {
+  event.preventDefault();
+  switch (event.key) {
+    case "ArrowLeft":
+      showPreviousCard();
+      break;
+    case "ArrowRight":
+      showNextCard();
+      break;
+    case "ArrowUp":
+      shuffleCards();
+      break;
+    case "ArrowDown":
+      flipCard();
+      break;
+  }
+});
+
+function showPreviousCard(){
+   if (flashcards.length === 0) return;
+  currentIndex = (currentIndex - 1 + flashcards.length) % flashcards.length;
+  showCard(); 
+}
+function showNextCard(){
+  if (flashcards.length === 0) return;
+  currentIndex = (currentIndex + 1) % flashcards.length;
+  showCard();
+}
+function shuffleCards(){
+  if (flashcards.length <= 1) return;
+
+  // Fisher–Yates shuffle
+  for (let i = flashcards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
+  }
+
+  currentIndex = 0;
+  showCard();
+}
+function flipCard(){
+  const card = flashcards[currentIndex];
+  if (showingFront) {
+    showCardContent("", card.back, card.backImage);
+  } else {
+    showCardContent(">", card.front, card.frontImage);
+  }
+  showingFront = !showingFront;
+}
